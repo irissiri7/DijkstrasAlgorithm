@@ -52,13 +52,9 @@ namespace Classes
             
             while (!finished)
             {
-                // Grabbing the node from queue with shortest DistanceFromStart (OrderBy)
-                // for processing of that Nodes connections. At first loop it will be the 
-                // start Node and that will result in new DFS being calculated. 
-                // FirstOrDefault will make
-                // sure we are only given reachable Nodes. If there are only nodes left
-                // with infinite DistanceFromStart that means they are unreachable and 
-                // FirstOrDefault will return null and we exit method.
+                // Grabbing the Node from queue with shortest DistanceFromStart (DFS)
+                // If there are only Nodes left with infinite DFS that means they 
+                // are unreachable and FirstOrDefault will return null and we exit method.
                 Node nextNode = queue.OrderBy(n => n.DistanceFromStart).FirstOrDefault(
                     n => !double.IsPositiveInfinity(n.DistanceFromStart));
                 
@@ -74,15 +70,16 @@ namespace Classes
             }
         }
 
-        // This method works through a Nodes connections checking updating the
-        // DistanceFromStart and Route.
+        // This method works through a Nodes connections updating the
+        // DistanceFromStart (DFS) and Route of all connecting Nodes.
         // The Node will basically be like:
-        // - Hi wazzup? My DistanceFromStart is X and getting here was Z, X+Z = Y.
-        // - Hey! Y is way lower than my current DistanceFromStart via this Route,
-        // I should definately go via your Route instead.
-        // Then the methods updated that connecting Nodes DistanceFromStart and Route 
-        // accordningly and everything moves on. If it turns out the DistanceFromStart was
-        // higher nothing will happen.
+        // - My DistanceFromStart is X and getting here was Z, X + Z = Y.
+        // The connecting Node will answer:
+        // - Y is lower than my current DFS (if it's the first visit, it will be infinite!), 
+        // I should definately go via your Route instead!
+        // Then the methods updated the connecting Nodes DFS and Route 
+        // accordningly and everything moves on. 
+        // If it turns out the Y was higher nothing will happen.
         private static void ProcessNode(Node node, List<Node> queue)
         {
             var connections = node.Connections.Where(c => queue.Contains(c.Node));
