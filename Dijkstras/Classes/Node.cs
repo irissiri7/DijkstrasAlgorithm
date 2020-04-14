@@ -7,12 +7,15 @@ namespace Classes
     {
         public string Name { get; private set; }
         public double DistanceFromStart { get; set; }
+        public List<string> Path { get; set; }
         public List<NodeConnection> Connections { get; private set; }
 
         public Node(string name)
         {
             Name = name;
             Connections = new List<NodeConnection>();
+            Path = new List<string>();
+            Path.Add(name);
         }
 
         public void AddConnection(Node targetNode, double distance)

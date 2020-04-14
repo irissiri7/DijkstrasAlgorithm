@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 
 namespace Classes
 {
     public static class Dijkstra
     {
-        public static Dictionary<string, double> CalculateDistances(Graph graph, string startNode)
+        public static string CalculateDistances(Graph graph, string startNode)
         {
             if (!graph.Nodes.Any(n => n.Key == startNode))
                 throw new ArgumentException("Starting node must be in graph.");
@@ -53,13 +54,38 @@ namespace Classes
             {
                 double distance = node.DistanceFromStart + connection.Distance;
                 if (distance < connection.Node.DistanceFromStart)
+                {
                     connection.Node.DistanceFromStart = distance;
+                    SetNewRoute(node, connection);
+                }
             }
         }
 
-        private static Dictionary<string, double> ExtractDistances(Graph graph)
+        private static void SetNewRoute(Node node, NodeConnection connection)
         {
-            return graph.Nodes.ToDictionary(n => n.Key, n => n.Value.DistanceFromStart);
+            connection.Node.Path.Clear();
+            foreach (var n in node.Path)
+            {
+                connection.Node.Path.Add(n);
+            }
+            connection.Node.Path.Add(connection.Node.Name);
+        }
+
+        private static string ExtractDistances(Graph graph)
+        {
+            StringBuilder str1 = new StringBuilder();
+            foreach (var node in graph.Nodes)
+            {
+                StringBuilder str2 = new StringBuilder();
+                foreach(var n in node.Value.Path)
+                {
+                    str2.Append(n + ",");
+                }
+
+                str1.Append($"{node.Key}, {node.Value.DistanceFromStart}. Route: {str2.ToString()} \n");
+            }
+
+            return str1.ToString();
         }
     }
 
