@@ -19,7 +19,7 @@ namespace Dijkstras
 
 
             //Connections
-            graph.AddConnection("A", "B", 1);
+            graph.AddConnection("A", "B", 20);
             graph.AddConnection("A", "C", 1);
             graph.AddConnection("B", "D", 5);
             graph.AddConnection("D", "C", 1);
