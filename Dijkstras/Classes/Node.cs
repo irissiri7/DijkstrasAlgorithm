@@ -6,15 +6,16 @@ namespace Classes
     public class Node
     {
         public string Name { get; private set; }
-        public int DistanceFromStart { get; set; }
+        public double DistanceFromStart { get; set; }
         public List<NodeConnection> Connections { get; private set; }
 
         public Node(string name)
         {
             Name = name;
+            Connections = new List<NodeConnection>();
         }
 
-        public void AddConnection(Node targetNode, int distance)
+        public void AddConnection(Node targetNode, double distance)
         {
             if (targetNode == null)
                 throw new ArgumentException("Target node is null");
@@ -24,7 +25,7 @@ namespace Classes
                 throw new ArgumentException("Distance must be a positive number");
 
             Connections.Add(new NodeConnection(targetNode, distance));
-            targetNode.AddConnection(this, distance);
+            targetNode.Connections.Add(new NodeConnection(this, distance));
 
         }
     }

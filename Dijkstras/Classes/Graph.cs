@@ -18,7 +18,7 @@ namespace Classes
             Nodes.Add(name, node);
         }
 
-        public void AddConnection(string fromNode, string toNode, int distance)
+        public void AddConnection(string fromNode, string toNode, double distance)
         {
             if (Nodes.ContainsKey(fromNode) && Nodes.ContainsKey(toNode))
             {

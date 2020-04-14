@@ -6,7 +6,7 @@ namespace Classes
 {
     public static class Dijkstra
     {
-        public static Dictionary<string, int> CalculateDistances(Graph graph, string startNode)
+        public static Dictionary<string, double> CalculateDistances(Graph graph, string startNode)
         {
             if (!graph.Nodes.Any(n => n.Key == startNode))
                 throw new ArgumentException("Starting node must be in graph.");
@@ -20,7 +20,7 @@ namespace Classes
         {
             foreach(var node in graph.Nodes.Values)
             {
-                node.DistanceFromStart = int.MaxValue;
+                node.DistanceFromStart = double.PositiveInfinity;
             }
 
             graph.Nodes[startNode].DistanceFromStart = 0;
@@ -33,7 +33,7 @@ namespace Classes
             while (!finished)
             {
                 Node nextNode = queue.OrderBy(n => n.DistanceFromStart).FirstOrDefault(
-                    n => n.DistanceFromStart != int.MaxValue);
+                    n => !double.IsPositiveInfinity(n.DistanceFromStart));
                 if (nextNode != null)
                 {
                     ProcessNode(nextNode, queue);
@@ -51,13 +51,13 @@ namespace Classes
             var connections = node.Connections.Where(c => queue.Contains(c.Node));
             foreach (var connection in connections)
             {
-                int distance = node.DistanceFromStart + connection.Distance;
+                double distance = node.DistanceFromStart + connection.Distance;
                 if (distance < connection.Node.DistanceFromStart)
                     connection.Node.DistanceFromStart = distance;
             }
         }
 
-        private static Dictionary<string, int> ExtractDistances(Graph graph)
+        private static Dictionary<string, double> ExtractDistances(Graph graph)
         {
             return graph.Nodes.ToDictionary(n => n.Key, n => n.Value.DistanceFromStart);
         }
